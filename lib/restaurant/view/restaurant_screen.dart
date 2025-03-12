@@ -1,5 +1,7 @@
 import 'package:actual/common/const/data.dart';
 import 'package:actual/restaurant/component/restaurant_card.dart';
+import 'package:actual/restaurant/model/restaurant_model.dart';
+import 'package:actual/restaurant/view/restaurant_detail_screen.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
@@ -9,7 +11,6 @@ class RestaurantScreen extends StatelessWidget {
   Future<List> paginateRestaurant() async {
     final dio = Dio();
     final accessToken = await storage.read(key: ACCESS_TOKEN_KEY);
-
     final resp = await dio.get(
       'http://$ip/restaurant',
       options: Options(
@@ -24,39 +25,39 @@ class RestaurantScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Center(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0),
-          child: FutureBuilder<List>(
-            future: paginateRestaurant(),
-            builder: (context, AsyncSnapshot<List> snapshot) {
-              if (!snapshot.hasData) {
-                return Container();
-              }
-              return ListView.separated(
-                itemCount: snapshot.data!.length,
-                itemBuilder: (_, index) {
-                  final item = snapshot.data![index];
-                  return RestaurantCard(
-                    image: Image.network(
-                      'http://$ip${item['thumbUrl']}',
-                      fit: BoxFit.cover,
-                    ),
-                    name: item['name'],
-                    tags: List<String>.from(item['tags']),
-                    ratingsCount: item['ratingsCount'],
-                    ratings: item['ratings'],
-                    deliveryTime: item['deliveryTime'],
-                    deliveryFee: item['deliveryFee'],
-                  );
-                },
-                separatorBuilder: (_, index) {
-                  return const SizedBox(height: 16.0);
-                },
-              );
-            },
-          ),
+    return Center(
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        child: FutureBuilder<List>(
+          future: paginateRestaurant(),
+          builder: (context, AsyncSnapshot<List> snapshot) {
+            if (!snapshot.hasData) {
+              return Container();
+            }
+            return ListView.separated(
+              itemCount: snapshot.data!.length,
+              itemBuilder: (_, index) {
+                final item = snapshot.data![index];
+                final pItem = RestaurantModel.fromJson(json: item);
+
+                return GestureDetector(
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (_) => RestaurantDetailScreen(),
+                      ),
+                    );
+                  },
+                  child: RestaurantCard.fromModel(
+                    model: pItem,
+                  ),
+                );
+              },
+              separatorBuilder: (_, index) {
+                return const SizedBox(height: 16.0);
+              },
+            );
+          },
         ),
       ),
     );

@@ -11,7 +11,7 @@ final storage = FlutterSecureStorage();
 // localhost
 final emulatorIp = '10.0.0.2:3000';
 final simulatorIp = '127.0.0.1:3000';
-final deviceIp = '192.168.10.124:3000';
+final deviceIp = '172.30.1.57:3000';
 
 // 물리적 기기인지 확인하는 getter
 bool get isPhysicalDevice =>

@@ -1,4 +1,5 @@
 import 'package:actual/common/const/colors.dart';
+import 'package:actual/restaurant/model/restaurant_model.dart';
 import 'package:flutter/material.dart';
 
 class RestaurantCard extends StatelessWidget {
@@ -17,6 +18,12 @@ class RestaurantCard extends StatelessWidget {
   // 평균 평점
   final double ratings;
 
+  // 상세 카드 여부
+  final bool isDetail;
+
+  // 상세 내용
+  final String? detail;
+
   const RestaurantCard({
     super.key,
     required this.image,
@@ -26,19 +33,42 @@ class RestaurantCard extends StatelessWidget {
     required this.deliveryTime,
     required this.deliveryFee,
     required this.ratings,
+    this.isDetail = false,
+    this.detail,
   });
+
+  factory RestaurantCard.fromModel({
+    required RestaurantModel model,
+  }) {
+    return RestaurantCard(
+      image: Image.network(
+        model.thumbUrl,
+        fit: BoxFit.cover,
+      ),
+      name: model.name,
+      tags: model.tags,
+      ratingsCount: model.ratingsCount,
+      ratings: model.ratings,
+      deliveryTime: model.deliveryTime,
+      deliveryFee: model.deliveryFee,
+      isDetail: false,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Column(
-        children: [
+    return Column(
+      children: [
+        if (isDetail) image,
+        if (!isDetail)
           ClipRRect(
             borderRadius: BorderRadius.circular(12.0),
             child: image,
           ),
-          const SizedBox(height: 16.0),
-          Column(
+        const SizedBox(height: 16.0),
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: isDetail ? 16.0 : 0),
+          child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Text(
@@ -71,11 +101,16 @@ class RestaurantCard extends StatelessWidget {
                     label: deliveryFee == 0 ? '무료' : deliveryFee.toString(),
                   ),
                 ],
-              )
+              ),
+              if (detail != null && isDetail)
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 16.0),
+                  child: Text(detail!),
+                ),
             ],
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
