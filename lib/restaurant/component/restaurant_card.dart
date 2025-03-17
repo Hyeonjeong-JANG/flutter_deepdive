@@ -1,4 +1,5 @@
 import 'package:actual/common/const/colors.dart';
+import 'package:actual/restaurant/model/restaurant_detail_model.dart';
 import 'package:actual/restaurant/model/restaurant_model.dart';
 import 'package:flutter/material.dart';
 
@@ -39,6 +40,7 @@ class RestaurantCard extends StatelessWidget {
 
   factory RestaurantCard.fromModel({
     required RestaurantModel model,
+    bool isDetail = false,
   }) {
     return RestaurantCard(
       image: Image.network(
@@ -51,7 +53,10 @@ class RestaurantCard extends StatelessWidget {
       ratings: model.ratings,
       deliveryTime: model.deliveryTime,
       deliveryFee: model.deliveryFee,
-      isDetail: false,
+      isDetail: isDetail,
+      detail: model is RestaurantDetailModel
+          ? model.detail
+          : null, // RestaurantDetailModel 타입이면 detail을 반환하고 아니면 null을 반환한다.
     );
   }
 
