@@ -3,6 +3,7 @@ import 'package:actual/common/layout/default_layout.dart';
 import 'package:actual/product/component/product_card.dart';
 import 'package:actual/restaurant/component/restaurant_card.dart';
 import 'package:actual/restaurant/model/restaurant_detail_model.dart';
+import 'package:actual/restaurant/repository/restaurant_repository.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
@@ -13,47 +14,58 @@ class RestaurantDetailScreen extends StatelessWidget {
     required this.id,
   });
 
-  Future<Map<String, dynamic>> getRestaurantDetail() async {
+  Future<RestaurantDetailModel> getRestaurantDetail() async {
     final dio = Dio();
-    final accessToken = await storage.read(key: ACCESS_TOKEN_KEY);
 
-    final resp = await dio.get(
-      'http://$ip/restaurant/$id',
-      options: Options(
-        headers: {
-          'authorization': 'Bearer $accessToken',
-        },
-      ),
-    );
+    final repository =
+        RestaurantRepository(dio, baseUrl: 'http://$ip/restaurant');
 
-    return resp.data;
+    return repository.getRestaurantDetail(id: id);
+
+    // 아래의 코드가 위 두 줄의 코드로 대체된다.
+    // final accessToken = await storage.read(key: ACCESS_TOKEN_KEY);
+
+    // final resp = await dio.get(
+    //   'http://$ip/restaurant/$id',
+    //   options: Options(
+    //     headers: {
+    //       'authorization': 'Bearer $accessToken',
+    //     },
+    //   ),
+    // );
   }
 
   @override
   Widget build(BuildContext context) {
     return DefaultLayout(
       title: '불타는 떡볶이',
-      child: FutureBuilder<Map<String, dynamic>>(
+      child: FutureBuilder<RestaurantDetailModel>(
         future: getRestaurantDetail(),
-        builder: (_, AsyncSnapshot<Map<String, dynamic>> snapshot) {
+        builder: (_, AsyncSnapshot<RestaurantDetailModel> snapshot) {
+          if (snapshot.hasError) {
+            return Center(
+              child: Text(snapshot.error.toString()),
+            );
+          }
           // 데이터가 없으면
           if (!snapshot.hasData) {
             return Center(
               child: CircularProgressIndicator(),
             );
           }
-          // 데이터가 있으면
-          final item = RestaurantDetailModel.fromJson(
-            snapshot.data!,
-          );
 
+          // retorofit을 하면 snapshot.data를 RestaurantDetailModel에 담아서 가공할 필요가 없이 그냥 쓰면 된다. 자동으로 해준다. 아래를 보라, 그냥 snapshot.data쓰면 되잖아?
+          // 데이터가 있으면
+          // final item = RestaurantDetailModel.fromJson(
+          //   snapshot.data!,
+          // );
           return CustomScrollView(
             slivers: [
               renderTop(
-                model: item,
+                model: snapshot.data!,
               ),
               renderLabel(),
-              renderProducts(products: item.products),
+              renderProducts(products: snapshot.data!.products),
             ],
           );
         },
