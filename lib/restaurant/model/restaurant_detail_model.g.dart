@@ -10,7 +10,7 @@ RestaurantDetailModel _$RestaurantDetailModelFromJson(
         Map<String, dynamic> json) =>
     RestaurantDetailModel(
       id: json['id'] as String,
-      thumbUrl: RestaurantModel.pathToUrl(json['thumbUrl'] as String),
+      thumbUrl: DataUtils.pathToUrl(json['thumbUrl'] as String),
       name: json['name'] as String,
       tags: (json['tags'] as List<dynamic>).map((e) => e as String).toList(),
       priceRange:
@@ -53,7 +53,7 @@ RestaurantProductModel _$RestaurantProductModelFromJson(
     RestaurantProductModel(
       id: json['id'] as String,
       name: json['name'] as String,
-      imgUrl: RestaurantProductModel.imgToUrl(json['imgUrl'] as String),
+      imgUrl: DataUtils.pathToUrl(json['imgUrl'] as String),
       detail: json['detail'] as String,
       price: (json['price'] as num).toInt(),
     );

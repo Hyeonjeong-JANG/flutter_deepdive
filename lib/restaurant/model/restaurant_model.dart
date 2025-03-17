@@ -1,4 +1,5 @@
 import 'package:actual/common/const/data.dart';
+import 'package:actual/common/utils/data_utils.dart';
 import 'package:json_annotation/json_annotation.dart';
 
 /**
@@ -29,7 +30,7 @@ class RestaurantModel {
   /// 어노테이션의 파라미터로 넣고
   /// 하단에 static으로 정의된 pathToUrl 함수가 실행되고
   /// 그 값이 final String thumbUrl; 의 값으로 들어간다.
-  @JsonKey(fromJson: pathToUrl)
+  @JsonKey(fromJson: DataUtils.pathToUrl)
   final String thumbUrl;
   final List<String> tags;
   final RestaurantPriceRange priceRange;
@@ -56,8 +57,8 @@ class RestaurantModel {
   Map<String, dynamic> toJson() =>
       _$RestaurantModelToJson(this); // toJson은 잘 안 씀
 
-  // 반드시 static으로 정의해야 한다.
-  static pathToUrl(String value) {
-    return 'http://$ip$value';
-  } // 이름을 아무렇게나 넣어도 되는데 첫 번째 매개변수 안에 어노테이션에 정의한 그 값이 들어간다. final String thumbUrl;여기의 thumbUrl이 여기의 value다.
+  // DataUtils로 이동
+  // static pathToUrl(String value) {
+  //   return 'http://$ip$value';
+  // } // 이름을 아무렇게나 넣어도 되는데 첫 번째 매개변수 안에 어노테이션에 정의한 그 값이 들어간다. final String thumbUrl;여기의 thumbUrl이 여기의 value다.
 }

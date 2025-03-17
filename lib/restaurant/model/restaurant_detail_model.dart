@@ -1,4 +1,5 @@
 import 'package:actual/common/const/data.dart';
+import 'package:actual/common/utils/data_utils.dart';
 import 'package:actual/restaurant/model/restaurant_model.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -32,7 +33,7 @@ class RestaurantDetailModel extends RestaurantModel {
 class RestaurantProductModel {
   final String id;
   final String name;
-  @JsonKey(fromJson: imgToUrl)
+  @JsonKey(fromJson: DataUtils.pathToUrl)
   final String imgUrl;
   final String detail;
   final int price;
@@ -47,6 +48,4 @@ class RestaurantProductModel {
 
   factory RestaurantProductModel.fromJson(Map<String, dynamic> json) =>
       _$RestaurantProductModelFromJson(json);
-
-  static imgToUrl(String value) => 'http://$imgToUrl';
 }
