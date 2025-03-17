@@ -47,12 +47,8 @@ class RestaurantDetailModel extends RestaurantModel {
       products: json['products']
           .map<RestaurantProductModel>(
             // RestaurantProductModel 타입으로 매핑하지 않으면 dynamic 타입이 자동으로 들어간 것으로 추론이 된다.
-            (x) => RestaurantProductModel(
-              id: x['id'],
-              name: x['name'],
-              imgUrl: x['imgUrl'],
-              detail: x['detail'],
-              price: x['price'],
+            (x) => RestaurantProductModel.fromJson(
+              json: x,
             ),
           )
           .toList(), // products는 리스트이기때문에 마음대로 리스트로 넣을 수 없다.
@@ -79,4 +75,16 @@ class RestaurantProductModel {
     required this.detail,
     required this.price,
   });
+
+  factory RestaurantProductModel.fromJson({
+    required Map<String, dynamic> json,
+  }) {
+    return RestaurantProductModel(
+      id: json['id'],
+      name: json['name'],
+      imgUrl: 'http://$ip${json['imgUrl']}',
+      detail: json['detail'],
+      price: json['price'],
+    );
+  }
 }

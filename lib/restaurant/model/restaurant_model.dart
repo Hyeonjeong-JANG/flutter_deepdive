@@ -24,7 +24,7 @@ class RestaurantModel {
     required this.tags,
     required this.priceRange,
     required this.ratings,
-    required this.ratingsCount,
+    required this.ratingsCount, 
     required this.deliveryTime,
     required this.deliveryFee,
   });
