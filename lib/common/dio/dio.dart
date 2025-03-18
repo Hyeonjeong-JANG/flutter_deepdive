@@ -49,6 +49,15 @@ class CustomInterceptor extends Interceptor {
   }
 
 // 2) 응답 받을 때
+// 응답을 받는 코드는 비교적 쉬운데 응용을 해서
+// 정상적인 응답을 보내고도 에러를 던지거나 그럴 수 있다!
+  @override
+  void onResponse(Response response, ResponseInterceptorHandler handler) {
+    print(
+        '[RES] [${response.requestOptions.method}] ${response.requestOptions.uri}'); // 응답을 받기 위해 보낸 요청을 찍어보자!
+
+    return super.onResponse(response, handler);
+  }
 
 // 3) 에러 발생 시 -> 에러가 났을 때는 어떤 상황을 캐치하고 싶냐가 매우 중요!
   @override
