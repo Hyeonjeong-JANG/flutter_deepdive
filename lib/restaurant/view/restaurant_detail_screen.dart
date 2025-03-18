@@ -122,7 +122,7 @@ class RestaurantDetailScreen extends StatelessWidget {
               ),
             );
           },
-          childCount: 10,
+          childCount: products.length,
         ),
       ),
     );
