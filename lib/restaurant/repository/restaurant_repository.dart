@@ -20,10 +20,7 @@ abstract class RestaurantRepository {
   /// 메서드 앞에는 반드시 반환받을 데이터와 완전히 똑같은 모델을 적어줘야 하는데 통신을 통해 데이터를 받기 때문에 Future로 싸줘야한다.
   @GET(
       '/{id}') // 전체 요청 주소: http://$ip/restaurant/:id -> retrofit에서는 {id}로 써야 한다.
-  @Headers({
-    'Authorization':
-        'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InRlc3RAY29kZWZhY3RvcnkuYWkiLCJzdWIiOiJmNTViMzJkMi00ZDY4LTRjMWUtYTNjYS1kYTlkN2QwZDkyZTUiLCJ0eXBlIjoiYWNjZXNzIiwiaWF0IjoxNzQyMjEzODUyLCJleHAiOjE3NDIyMTQxNTJ9.WI39OFSLoXid4Osf2rhKJr8QKxKFIE2KfVdaMgixbcQ'
-  }) // 원래 이렇게 넣지 않는데 일단 이렇게 넣어둠.
+  @Headers({'accessToken': 'true'}) // 원래 이렇게 넣지 않는데 일단 이렇게 넣어둠.
   Future<RestaurantDetailModel> getRestaurantDetail({
     @Path() required String id,
     // @Path('id') required String sid, -> 이렇게 할 수도 있다.
